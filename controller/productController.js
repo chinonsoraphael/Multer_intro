@@ -102,16 +102,13 @@ exports.deleteProduct = async (req, res) => {
     try {
         const id = req.params.id
         const product = await Product.findByPk(id)
+        const oldFilePath = product.productImage
+            
+        
 
-        if (!product) {
-            return res.status(404).json({
-                message: "Product not found"
-            })
-        }
-
-        if (product.productImage && fs.existsSync(product.productImage)) {
-            fs.unlinkSync(product.productImage)
-        }
+      
+        fs.unlinkSync(oldFilePath)
+        
         await product.destroy()
 
         res.status(200).json({
